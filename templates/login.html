@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Login — ShieldHer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+
+  <div class="auth-wrap">
+    <div class="glass-lg auth-card">
+      <div class="auth-header">
+        <div class="auth-icon">🛡️</div>
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-sub">Login to ShieldHer Safety App</p>
+      </div>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-msg">{{ messages[0] }}</div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="/login">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Enter your username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:8px;">Sign In →</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="/register">Register</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

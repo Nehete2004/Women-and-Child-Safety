@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Alert History — ShieldHer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="bg-blob blob1"></div>
+  <nav class="navbar">
+    <span class="nav-brand">🔔 Alert History</span>
+    <a href="/dashboard" class="btn btn-ghost btn-sm">← Back</a>
+  </nav>
+
+  <div class="page-content">
+    <p class="page-sub" style="margin-bottom:20px;">Recent SOS alerts sent from this account.</p>
+
+    {% if alerts %}
+      {% for a in alerts %}
+      <div class="alert-item">
+        <div><b>👤 {{ a['username'] or 'User' }}</b></div>
+        <div class="meta">
+          {% if a['latitude'] %}
+            📌 {{ "%.4f"|format(a['latitude']) }}, {{ "%.4f"|format(a['longitude']) }} —
+          {% endif %}
+          {% if a['location'] %}
+            <a href="{{ a['location'] }}" target="_blank">Open in Maps →</a>
+          {% endif %}
+        </div>
+        <div class="meta">🕐 {{ a['timestamp'] }}</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="glass" style="padding:30px;text-align:center;color:var(--muted);">
+        <div style="font-size:40px;margin-bottom:12px;">🕊️</div>
+        <p>No alerts yet. Stay safe!</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/dashboard" class="bn-item"><span class="bn-icon">🏠</span> Home</a>
+    <a href="/location" class="bn-item"><span class="bn-icon">📍</span> Location</a>
+    <a href="/alerts" class="bn-item active"><span class="bn-icon">🔔</span> Alerts</a>
+    <a href="/about" class="bn-item"><span class="bn-icon">ℹ️</span> About</a>
+    <a href="/profile" class="bn-item"><span class="bn-icon">👤</span> Profile</a>
+  </nav>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Dashboard — ShieldHer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <span class="nav-brand">🛡️ ShieldHer</span>
+    <div class="nav-links">
+      <a href="/alerts" class="nav-link">Alerts</a>
+      <a href="/profile" class="nav-link">Profile</a>
+      <a href="/logout" class="nav-link">Logout</a>
+    </div>
+  </nav>
+
+  <div class="page-content">
+
+    <!-- GREETING -->
+    <div style="margin-bottom:20px;">
+      <p class="page-title">Hello, {{ username }} 👋</p>
+      <p class="page-sub">Stay safe. Tap SOS for instant emergency alert.</p>
+    </div>
+
+    <!-- SOS SECTION -->
+    <div class="glass sos-section" style="position:relative;">
+      <div class="sos-ring">
+        <button class="sos-btn" onclick="startSOS()" id="sosBtn">SOS</button>
+      </div>
+      <p class="sos-hint">Tap to send emergency alert via SMS, WhatsApp & Email</p>
+      <div id="sos-status"></div>
+    </div>
+
+    <!-- SIREN CONTROLS -->
+    <div style="display:flex;gap:10px;margin-bottom:20px;">
+      <button class="btn btn-ghost" style="flex:1;" onclick="onlySiren()">🔊 Siren</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="stopSiren()">⏹ Stop</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="startShake()">📳 Shake</button>
+    </div>
+    <div id="shake-status"></div>
+
+    <!-- FEATURE GRID -->
+    <p class="section-title" style="margin-top:24px;">⚡ Quick Actions</p>
+    <div class="feature-grid">
+      <div class="feature-card" onclick="window.location.href='/location'">
+        <span class="feature-icon">📍</span>
+        <h6>Live Location</h6>
+        <p>Track & send location</p>
+      </div>
+      <div class="feature-card" onclick="window.location.href='/profile'">
+        <span class="feature-icon">👤</span>
+        <h6>Profile</h6>
+        <p>Manage your info</p>
+      </div>
+      <div class="feature-card" onclick="openTips()">
+        <span class="feature-icon">🛡️</span>
+        <h6>Safety Tips</h6>
+        <p>Important guidelines</p>
+      </div>
+      <div class="feature-card" onclick="openChat()">
+        <span class="feature-icon">🤖</span>
+        <h6>Shield Bot</h6>
+        <p>Instant AI help</p>
+      </div>
+    </div>
+
+    <!-- CONTACTS -->
+    <p class="section-title" style="margin-top:28px;">📞 Emergency Contacts</p>
+
+    {% for c in contacts %}
+    <div class="contact-item">
+      <div>
+        <div class="name">{{ c['name'] }}</div>
+        <div class="phone">{{ c['phone'] }}</div>
+      </div>
+      <a href="/delete_contact/{{ c['id'] }}" class="btn btn-ghost btn-sm" style="color:#ff6b8a;">✕</a>
+    </div>
+    {% endfor %}
+
+    <form action="/add_contact" method="POST" style="margin-top:12px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <input type="text" name="name" placeholder="Contact name" required>
+        <input type="tel" name="phone" placeholder="+91XXXXXXXXXX" required>
+      </div>
+      <button type="submit" class="btn btn-primary">➕ Add Contact</button>
+    </form>
+
+    <!-- HELPLINE NUMBERS -->
+    <p class="section-title" style="margin-top:28px;">🚨 National Helplines</p>
+    <div class="glass" style="padding:16px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px;">
+        <div>👮 Police: <b>100</b></div>
+        <div>🚑 Ambulance: <b>108</b></div>
+        <div>👩 Women Helpline: <b>1091</b></div>
+        <div>🆘 Emergency: <b>112</b></div>
+        <div>🔥 Fire: <b>101</b></div>
+        <div>👧 Child: <b>1098</b></div>
+      </div>
+    </div>
+
+    <div style="height:30px;"></div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="/dashboard" class="bn-item active">
+      <span class="bn-icon">🏠</span> Home
+    </a>
+    <a href="/location" class="bn-item">
+      <span class="bn-icon">📍</span> Location
+    </a>
+    <a href="/alerts" class="bn-item">
+      <span class="bn-icon">🔔</span> Alerts
+    </a>
+    <a href="/about" class="bn-item">
+      <span class="bn-icon">ℹ️</span> About
+    </a>
+    <a href="/profile" class="bn-item">
+      <span class="bn-icon">👤</span> Profile
+    </a>
+  </nav>
+
+  <!-- CHATBOT FAB -->
+  <button class="chatbot-fab" onclick="openChat()" title="Shield Chatbot">🤖</button>
+
+  <!-- CHATBOT BOX -->
+  <div id="chatbotBox" class="chatbot-box">
+    <div class="chat-header">
+      🤖 Shield Chatbot
+      <span class="chat-close" onclick="closeChat()">✕</span>
+    </div>
+    <div id="chatMessages" class="chat-messages">
+      <div class="bot-msg">Hi 👋 I'm ShieldBot. Type <b>help</b> for emergency info.</div>
+    </div>
+    <div class="chat-input-row">
+      <input id="userInput" placeholder="Type here..." onkeypress="if(event.key==='Enter')sendMsg()">
+      <button onclick="sendMsg()">Send</button>
+    </div>
+  </div>
+
+  <!-- TIPS MODAL -->
+  <div id="tipsModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;">
+    <div class="glass-lg" style="max-width:400px;width:100%;padding:24px;">
+      <h3 style="color:var(--red);margin-bottom:16px;">🛡️ Safety Tips</h3>
+      <ul style="font-size:14px;line-height:2;padding-left:16px;color:rgba(240,240,245,0.85);">
+        <li>Always share your live location with a trusted person</li>
+        <li>Avoid isolated areas, especially at night</li>
+        <li>Keep emergency numbers saved & accessible</li>
+        <li>Trust your instincts — leave unsafe situations immediately</li>
+        <li>Use this app's SOS if you feel threatened</li>
+        <li>Enable shake detection for hands-free SOS</li>
+        <li>Keep your phone charged before going out</li>
+        <li>Walk confidently and stay alert in public</li>
+      </ul>
+      <button class="btn btn-primary" style="margin-top:16px;" onclick="closeTips()">Close</button>
+    </div>
+  </div>
+
+  <!-- SIREN AUDIO -->
+  <audio id="sirenAudio" loop>
+    <source src="/static/sounds/siren.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+  // ---- SIREN ----
+  const siren = document.getElementById('sirenAudio');
+  function onlySiren() { siren.play(); }
+  function stopSiren() { siren.pause(); siren.currentTime = 0; }
+
+  // ---- SOS ----
+  let sosActive = false;
+  function startSOS() {
+    if (sosActive) return;
+    sosActive = true;
+    const btn = document.getElementById('sosBtn');
+    btn.textContent = '...';
+    btn.style.opacity = '0.7';
+    showStatus('🔴 Activating SOS...', 'err');
+
+    siren.play();
+
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const mapUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+
+        // POST to server (saves + sends all alerts)
+        fetch('/send_sos_email', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ location: mapUrl })
+        })
+        .then(r => r.json())
+        .then(data => {
+          showStatus('🚨 SOS Sent — SMS, WhatsApp & Email dispatched!', 'ok');
+          btn.textContent = 'SOS';
+          btn.style.opacity = '1';
+          sosActive = false;
+        })
+        .catch(() => {
+          showStatus('❌ Could not connect to server', 'err');
+          btn.textContent = 'SOS';
+          btn.style.opacity = '1';
+          sosActive = false;
+        });
+      },
+      function() {
+        showStatus('❌ Location denied — please enable GPS', 'err');
+        btn.textContent = 'SOS';
+        btn.style.opacity = '1';
+        sosActive = false;
+      },
+      { enableHighAccuracy: true }
+    );
+  }
+
+  function showStatus(msg, type) {
+    const el = document.getElementById('sos-status');
+    el.textContent = msg;
+    el.className = 'show ' + type;
+  }
+
+  // ---- SHAKE ----
+  let lastX, lastY, lastZ, shakeOn = false;
+  function startShake() {
+    if (shakeOn) return;
+    shakeOn = true;
+    document.getElementById('shake-status').textContent = '📳 Shake detection active';
+    window.addEventListener('devicemotion', function(e) {
+      const acc = e.accelerationIncludingGravity;
+      if (!acc) return;
+      if (lastX !== undefined) {
+        const delta = Math.abs(lastX - acc.x) + Math.abs(lastY - acc.y) + Math.abs(lastZ - acc.z);
+        if (delta > 20) { startSOS(); }
+      }
+      lastX = acc.x; lastY = acc.y; lastZ = acc.z;
+    });
+  }
+
+  // ---- CHATBOT ----
+  function openChat()  { document.getElementById('chatbotBox').style.display = 'flex'; }
+  function closeChat() { document.getElementById('chatbotBox').style.display = 'none'; }
+  function openTips()  { document.getElementById('tipsModal').style.display = 'flex'; }
+  function closeTips() { document.getElementById('tipsModal').style.display = 'none'; }
+
+  function sendMsg() {
+    const input = document.getElementById('userInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    const chat = document.getElementById('chatMessages');
+    chat.innerHTML += `<div class="user-msg">${msg}</div>`;
+    input.value = '';
+    setTimeout(() => {
+      chat.innerHTML += `<div class="bot-msg">${botReply(msg)}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }, 400);
+  }
+
+  function botReply(msg) {
+    const m = msg.toLowerCase();
+    if (m.includes('help') || m.includes('emergency'))
+      return '🚨 Emergency Numbers:<br>👮 Police: <b>100</b><br>🚑 Ambulance: <b>108</b><br>👩 Women: <b>1091</b><br>🆘 Emergency: <b>112</b>';
+    if (m.includes('sos') || m.includes('danger'))
+      return '👆 Tap the red SOS button to send your location to emergency contacts immediately!';
+    if (m.includes('location'))
+      return '📍 Go to the <a href="/location" style="color:var(--red)">Location</a> tab to share your live GPS location.';
+    if (m.includes('contact'))
+      return '📞 Add emergency contacts below on this dashboard so they are alerted during SOS.';
+    if (m.includes('tip') || m.includes('safe'))
+      return '🛡️ Stay in well-lit areas, share location with trusted people, and keep SOS ready.';
+    return '💬 I can help with: <b>help, sos, location, contacts, tips</b>. What do you need?';
+  }
+
+  function goFeature(type) { window.location.href = '/feature/' + type; }
+  </script>
+</body>
+</html>

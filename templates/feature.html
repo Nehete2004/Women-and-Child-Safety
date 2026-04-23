@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>{{ feature|title }} — ShieldHer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="bg-blob blob1"></div>
+  <nav class="navbar">
+    <span class="nav-brand">🛡️ {{ feature|title }}</span>
+    <a href="/dashboard" class="btn btn-ghost btn-sm">← Back</a>
+  </nav>
+
+  <div class="page-content" style="text-align:center;padding-top:60px;">
+    <div style="font-size:60px;margin-bottom:16px;">
+      {% if feature == 'voice' %}🎤
+      {% elif feature == 'shake' %}📳
+      {% elif feature == 'route' %}🛣
+      {% elif feature == 'nearby' %}📍
+      {% elif feature == 'fakecall' %}📞
+      {% elif feature == 'community' %}🗺
+      {% elif feature == 'wearable' %}⌚
+      {% elif feature == 'chatbot' %}🤖
+      {% elif feature == 'audio' %}🎙
+      {% elif feature == 'guardian' %}👨‍👩‍👧
+      {% else %}🔧
+      {% endif %}
+    </div>
+    <h2 style="font-family:'Outfit',sans-serif;margin-bottom:12px;">{{ feature|title }}</h2>
+    <p style="color:var(--muted);max-width:340px;margin:0 auto 32px;">
+      This advanced feature is coming soon. We are working on making ShieldHer even more powerful for your safety.
+    </p>
+    <div class="glass" style="display:inline-block;padding:12px 24px;color:var(--red);font-size:14px;font-weight:600;">
+      🚧 Feature Under Development
+    </div>
+    <div style="margin-top:32px;">
+      <a href="/dashboard" class="btn btn-primary">← Dashboard</a>
+    </div>
+  </div>
+</body>
+</html>

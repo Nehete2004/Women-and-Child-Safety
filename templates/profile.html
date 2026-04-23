@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Profile — ShieldHer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="bg-blob blob1"></div>
+  <nav class="navbar">
+    <span class="nav-brand">👤 Profile</span>
+    <a href="/dashboard" class="btn btn-ghost btn-sm">← Back</a>
+  </nav>
+
+  <div class="page-content">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-msg" style="margin-bottom:16px;">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- PROFILE PIC -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <div class="profile-circle">
+        {% if user['image'] %}
+          <img src="/static/uploads/{{ user['image'] }}" alt="Profile">
+        {% else %}
+          👩
+        {% endif %}
+      </div>
+      <p style="margin-top:10px;font-size:14px;color:var(--muted);">Tap below to change photo</p>
+      <form action="/upload_image" method="POST" enctype="multipart/form-data" style="margin-top:8px;">
+        <input type="file" name="image" accept="image/*" onchange="this.form.submit()"
+               style="font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;">
+      </form>
+    </div>
+
+    <!-- EDIT PROFILE -->
+    <p class="section-title">✏️ Edit Info</p>
+    <div class="glass" style="padding:20px;margin-bottom:20px;">
+      <form action="/profile" method="POST">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="name" value="{{ user['username'] or '' }}" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" name="phone" value="{{ user['phone'] or '' }}" placeholder="+91XXXXXXXXXX">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+
+    <!-- ACCOUNT INFO -->
+    <p class="section-title">📋 Account Info</p>
+    <div class="glass" style="padding:16px;font-size:14px;line-height:2.2;">
+      <div>📧 Email: <b>{{ user['email'] or '—' }}</b></div>
+      <div>🆔 User ID: <b>#{{ user['id'] }}</b></div>
+    </div>
+
+    <div style="margin-top:24px;">
+      <a href="/logout" class="btn btn-ghost" style="width:100%;justify-content:center;color:#ff6b8a;">
+        🚪 Logout
+      </a>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/dashboard" class="bn-item"><span class="bn-icon">🏠</span> Home</a>
+    <a href="/location" class="bn-item"><span class="bn-icon">📍</span> Location</a>
+    <a href="/alerts" class="bn-item"><span class="bn-icon">🔔</span> Alerts</a>
+    <a href="/about" class="bn-item"><span class="bn-icon">ℹ️</span> About</a>
+    <a href="/profile" class="bn-item active"><span class="bn-icon">👤</span> Profile</a>
+  </nav>
+</body>
+</html>

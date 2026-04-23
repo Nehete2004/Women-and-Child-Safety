@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Live Location — ShieldHer</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+  <div class="bg-blob blob1"></div>
+
+  <nav class="navbar">
+    <span class="nav-brand">📍 Live Location</span>
+    <a href="/dashboard" class="btn btn-ghost btn-sm">← Back</a>
+  </nav>
+
+  <div style="position:relative;z-index:1;padding:16px 16px 100px;">
+
+    <div class="location-info">
+      <div><span>Latitude: </span><span id="lat">Fetching...</span></div>
+      <div style="margin-top:6px;"><span>Longitude: </span><span id="lng">—</span></div>
+      <div style="margin-top:6px;"><span>Status: </span><span id="gps-status" style="color:var(--muted);">Requesting GPS...</span></div>
+    </div>
+
+    <div id="map"></div>
+
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="sendAlert()">🚨 Send Alert</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="openGoogleMaps()">🗺 Open Maps</button>
+    </div>
+
+    <div id="alert-result" style="margin-top:12px;font-size:14px;"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/dashboard" class="bn-item"><span class="bn-icon">🏠</span> Home</a>
+    <a href="/location" class="bn-item active"><span class="bn-icon">📍</span> Location</a>
+    <a href="/alerts" class="bn-item"><span class="bn-icon">🔔</span> Alerts</a>
+    <a href="/about" class="bn-item"><span class="bn-icon">ℹ️</span> About</a>
+    <a href="/profile" class="bn-item"><span class="bn-icon">👤</span> Profile</a>
+  </nav>
+
+  <script>
+  let latVal = null, lngVal = null;
+  const map = L.map('map').setView([20.5937, 78.9629], 5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  let marker;
+
+  function updateLocation(lat, lng) {
+    document.getElementById('lat').textContent = lat.toFixed(6);
+    document.getElementById('lng').textContent = lng.toFixed(6);
+    document.getElementById('gps-status').textContent = 'Location updated ✅';
+    document.getElementById('gps-status').style.color = '#34c759';
+
+    if (!marker) {
+      marker = L.marker([lat, lng]).addTo(map).bindPopup('You are here 📍').openPopup();
+    } else {
+      marker.setLatLng([lat, lng]);
+    }
+    map.setView([lat, lng], 16);
+  }
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        latVal = pos.coords.latitude;
+        lngVal = pos.coords.longitude;
+        updateLocation(latVal, lngVal);
+      },
+      err => {
+        document.getElementById('gps-status').textContent = 'Location denied ❌';
+        document.getElementById('gps-status').style.color = 'var(--red)';
+      },
+      { enableHighAccuracy: true }
+    );
+  }
+
+  function sendAlert() {
+    if (!latVal || !lngVal) {
+      document.getElementById('alert-result').textContent = '❌ Please allow GPS access first.';
+      return;
+    }
+    document.getElementById('alert-result').textContent = '⏳ Sending alert...';
+    window.location.href = `/send_alert?lat=${latVal}&lng=${lngVal}`;
+  }
+
+  function openGoogleMaps() {
+    if (!latVal || !lngVal) return;
+    window.open(`https://www.google.com/maps?q=${latVal},${lngVal}`, '_blank');
+  }
+  </script>
+</body>
+</html>
