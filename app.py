@@ -20,7 +20,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # ---------------- TWILIO CONFIG ----------------
 TWILIO_SID    = "AC397e71e5c75e0328033b52ab068540e2"
-TWILIO_AUTH   = "94affd534b4d42c29d4698dceb5f2909"
+TWILIO_AUTH   = "bc8172ca87afcac96e4db098e8fa3d2b"
 TWILIO_FROM   = "+19898481768"                  # Your Twilio SMS number
 TWILIO_WA_FROM = "whatsapp:+14155238886"        # Twilio WhatsApp sandbox
 ALERT_TO_PHONE = "+918180923222"                # Registered phone
