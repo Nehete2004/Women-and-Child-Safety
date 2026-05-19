@@ -19,17 +19,17 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # ---------------- TWILIO CONFIG ----------------
-TWILIO_SID    = "AC397e71e5c75e0328033b52ab068540e2"
-TWILIO_AUTH   = "bc8172ca87afcac96e4db098e8fa3d2b"
-TWILIO_FROM   = "+19898481768"                  # Your Twilio SMS number
-TWILIO_WA_FROM = "whatsapp:+14155238886"        # Twilio WhatsApp sandbox
+TWILIO_SID    = "ACebcb641a20b21c6f259f51bef9ccc7ed"
+TWILIO_AUTH   = "d5af3cb8c31319009de16dbd3da1edcc"
+TWILIO_FROM   = "+19068133480"                  # Your Twilio SMS number
+#TWILIO_WA_FROM = "whatsapp:+14155238886"        # Twilio WhatsApp sandbox
 ALERT_TO_PHONE = "+918180923222"                # Registered phone
-ALERT_TO_WA    = "whatsapp:+918180923222"       # Verified WhatsApp
+#ALERT_TO_WA    = "whatsapp:+918180923222"       # Verified WhatsApp
 
 twilio_client = Client(TWILIO_SID, TWILIO_AUTH)
 
 # ---------------- EMAIL CONFIG ----------------
-EMAIL_SENDER   = "rohitnehete@gmail.com"
+EMAIL_SENDER   = "rohitnehete21@gmail.com"
 EMAIL_PASSWORD = "ovcv llcc ctry ukki"          # App password
 EMAIL_RECEIVER = "neheterohit21@gmail.com"
 
