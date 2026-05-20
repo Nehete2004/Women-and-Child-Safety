@@ -32,9 +32,9 @@ Open: http://localhost:5000
 ## 🔑 Twilio Configuration (in app.py)
 
 ```python
-TWILIO_SID     = "ACa13c9a27a77ef151b7bac72b709e2c81"
-TWILIO_AUTH    = "0f0fef1eaeb7a2a9efdef89f0e50af80"
-TWILIO_FROM    = "+17157507982"           # Your Twilio number
+TWILIO_SID     = "ACebcb641a20b21c6f259f51bef9ccc7ed"
+TWILIO_AUTH    = d5af3cb8c31319009de16dbd3da1edcc"
+TWILIO_FROM    = "+19068133480"           # Your Twilio number
 TWILIO_WA_FROM = "whatsapp:+14155238886" # Twilio WhatsApp sandbox
 ALERT_TO_PHONE = "+918180923222"          # Alert recipient phone
 ALERT_TO_WA    = "whatsapp:+918180923222" # Alert recipient WhatsApp
