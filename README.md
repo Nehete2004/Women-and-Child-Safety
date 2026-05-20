@@ -33,7 +33,7 @@ Open: http://localhost:5000
 
 ```python
 TWILIO_SID     = "ACebcb641a20b21c6f259f51bef9ccc7ed"
-TWILIO_AUTH    = d5af3cb8c31319009de16dbd3da1edcc"
+TWILIO_AUTH    = "d5af3cb8c31319009de16dbd3da1edcc"
 TWILIO_FROM    = "+19068133480"           # Your Twilio number
 TWILIO_WA_FROM = "whatsapp:+14155238886" # Twilio WhatsApp sandbox
 ALERT_TO_PHONE = "+918180923222"          # Alert recipient phone
